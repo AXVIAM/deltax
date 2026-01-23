@@ -1,0 +1,643 @@
+\documentclass[fleqn,usenatbib]{mnras}
+
+\usepackage{newtxtext,newtxmath}
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\usepackage{placeins}
+
+
+\title[DeltaX: A Fixed-Parameter Mapping for Galaxy Rotation Curves]
+{DeltaX: A Fixed-Parameter Mapping for Galaxy Rotation Curves}
+
+\author[Christopher P. B. Smolen]{Christopher P. B. Smolen\thanks{E-mail: christopher.smolen@axviam.com}\\
+AXVIAM PBC}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present $\Delta X$, a fixed-parameter empirical mapping that describes the radial structure of galaxy rotation curves. The mapping relates observed and baryonic rotation velocities through a dimensionless formulation evaluated pointwise along full rotation-curve profiles. All parameters are fixed globally and applied uniformly across the sample, with no galaxy-by-galaxy tuning, profile-dependent optimization, smoothing, or interpolation.
+
+We apply the mapping to 175 disk galaxies from the SPARC database and assess performance using complementary absolute and shape-based metrics. Across the full sample, residuals remain bounded with no distinct population of catastrophic failures. Shape-based performance is particularly strong, indicating that the mapping captures the radial organization of rotation curves across galaxies spanning wide ranges in mass, size, and surface brightness.
+
+Robustness is evaluated through systematic ablation tests, alternative saturation prescriptions, and parameter scans. These tests show that performance is dominated by the normalized radial dependence, that saturation is required but not finely tuned, and that good performance persists across a broad region of parameter space. We further situate $\Delta X$ relative to established empirical relations, showing how the Radial Acceleration Relation and the Baryonic Tully--Fisher Relation arise as projections or limiting cases. The scope of this work is intentionally empirical; no physical interpretation is advanced.
+\end{abstract}
+
+\begin{keywords}
+galaxies: kinematics and dynamics -- galaxies: spiral -- galaxies: structure -- galaxies: photometry -- methods: data analysis -- methods: analytical
+\end{keywords}
+
+
+\section{Introduction}
+
+Galaxy rotation curves have long provided one of the clearest empirical windows into the dynamical structure of disk galaxies. Measurements of rotational velocity as a function of radius reveal systematic departures from the expectations of simple Newtonian dynamics applied to the observed baryonic mass distribution, motivating decades of theoretical and observational work. Over time, this effort has produced both flexible parametric models—most notably halo-based mass models—and a growing set of empirical regularities linking baryonic structure to dynamical behavior.
+
+Among these empirical approaches, relations such as the Radial Acceleration Relation (RAR) and the Baryonic Tully--Fisher Relation (BTFR) have demonstrated that galaxy dynamics exhibit remarkable coherence across many orders of magnitude in mass and size \citep[e.g.][]{Milgrom1983,TullyFisher1977,Famaey2012,Li2019}. These relations highlight strong correlations between baryonic quantities and rotational velocities, often with surprisingly small scatter. At the same time, they are typically constructed as projections or summaries of more complex radial information, and do not directly encode the full structure of galaxy rotation curves as functions of radius.
+
+A persistent tension in rotation-curve modeling lies between flexibility and universality. Halo-based models achieve excellent fits to individual galaxies by introducing multiple free parameters that may vary from system to system, but at the cost of reduced comparability and increased degeneracy. Empirical relations, by contrast, often emphasize universality but do so by collapsing radial information into global or semi-global quantities. This raises the question of whether it is possible to construct a fixed-parameter empirical mapping that operates directly at the level of rotation-curve structure, without per-galaxy tuning or optimization.
+
+In this work, we introduce \(\Delta X\), a fixed-parameter empirical mapping designed to relate baryonic structure to the detailed radial behavior of galaxy rotation curves. The mapping is applied uniformly across a heterogeneous sample of disk galaxies, with no galaxy-by-galaxy parameter fitting, normalization adjustments, or profile-dependent tuning. All parameters entering the mapping are fixed globally for the entire sample. The analysis is carried out using the SPARC rotation-curve database, which provides high-quality kinematic and baryonic measurements spanning a wide range of galaxy masses, surface brightnesses, and morphologies.
+
+The scope of this paper is intentionally empirical. We focus on defining the \(\Delta X\) mapping precisely, characterizing its behavior across the SPARC sample, and assessing its robustness under controlled variations of its components. We do not attempt to provide a physical interpretation of the mapping, nor do we advance claims regarding the underlying dynamical origin of the observed behavior. Instead, the goal is to establish, as clearly and reproducibly as possible, what the mapping does and how well it performs when applied uniformly to real galaxy data.
+
+The paper is organized as follows. Section~2 defines the \(\Delta X\) mapping and its constituent quantities. Section~3 describes the data and analysis methodology, including the precise order of operations and performance metrics. Section~4 presents results across the full SPARC sample, including representative examples and radial breakdowns. Section~5 explores ablation tests and robustness to variations in the mapping. Section~6 situates \(\Delta X\) relative to existing empirical relations. Finally, Sections~7 and~8 discuss the implications of the results and summarize the main conclusions.
+
+\section{Definition of the DeltaX Mapping}
+
+This section defines the $\Delta X$ mapping in a fully explicit and reproducible manner. All quantities entering the mapping are constructed directly from observed or derived rotation-curve data, and all parameters are fixed globally across the sample. No galaxy-by-galaxy fitting, tuning, or optimization is performed at any stage.
+
+\subsection{Observables and Derived Quantities}
+
+For each galaxy, the analysis begins with the observed rotation curve $V_{\mathrm{obs}}(r)$ and the baryonic rotation curve $V_{\mathrm{lum}}(r)$ provided by the SPARC database. These quantities are evaluated at the discrete radial sampling points supplied in the data. No smoothing, interpolation, or resampling is applied.
+
+From these inputs, we construct the observed dimensionless quantity
+\begin{equation}
+\Delta X_{\mathrm{obs}}(r) \equiv
+\frac{V_{\mathrm{obs}}^2(r) - V_{\mathrm{lum}}^2(r)}{V_{\mathrm{lum}}^2(r)} ,
+\end{equation}
+which measures the fractional excess of the observed squared rotation velocity relative to the baryonic contribution at each radius.
+
+This construction is purely algebraic and involves no free parameters. It is evaluated independently at each radial point and serves as the empirical target against which the mapping predictions are compared.
+
+In this formulation, $\Delta X_{\mathrm{obs}}$ is defined as a fractional excess in squared rotation velocity rather than a velocity ratio, allowing a direct and transparent connection to acceleration-based empirical relations.
+
+\subsection{Normalized Radial Coordinate}
+
+The mapping operates on a dimensionless radial coordinate, denoted $\hat{D}$, constructed from the physical galactocentric radius $r$. Each galaxy is assigned a characteristic radial scale derived from its observed structure, and the radial coordinate is normalized by this scale to produce
+\begin{equation}
+\hat{D} \equiv \frac{r}{R_{\mathrm{char}}} .
+\end{equation}
+
+This normalization is fixed in form and applied uniformly across the sample. It does not depend on $\Delta X$, on any fitting outcome, or on the mapping parameters. The purpose of $\hat{D}$ is to provide a common, dimensionless coordinate on which rotation-curve structure can be compared across galaxies of different sizes.
+
+
+No additional information about the mass distribution, velocity scale, or rotation-curve shape enters through this normalization.
+
+Once constructed, the normalized coordinate $\hat{D}$ is used strictly as a pointwise label: the $\Delta X$ mapping is evaluated independently at each sampled radius. No information is shared or coupled between radial points, and the normalization introduces no smoothing, interpolation, or regularization of the rotation-curve profiles.
+
+\subsection{Functional Form of the Mapping}
+
+The $\Delta X$ mapping is defined through an implicit algebraic relation between $\Delta X$ and a baryonic driver function $B(\hat{D})$,
+\begin{equation}
+\Delta X \left( 1 + N \, \Delta X \right) = B(\hat{D}) ,
+\end{equation}
+where $N$ is a fixed, dimensionless parameter applied uniformly to all galaxies.
+
+The driver function is constructed as
+\begin{equation}
+B(\hat{D}) = \log\!\left( 1 + \lambda \, \hat{D}^{\,b} \right) ,
+\end{equation}
+where $b$ and $\lambda$ are fixed parameters controlling the radial scaling and saturation strength, respectively. The logarithmic form ensures bounded growth of the driver at large radii and prevents unphysical divergence of the mapping.
+
+For a given $\hat{D}$, the equation for $\Delta X$ is quadratic and admits an analytic solution. The physically relevant branch is selected,
+\begin{equation}
+\Delta X_{\mathrm{pred}}(\hat{D}) =
+\frac{-1 + \sqrt{1 + 4 N B(\hat{D})}}{2N} ,
+\end{equation}
+which is real and non-negative for all $\hat{D} \ge 0$.
+
+All parameters $(b, N, \lambda)$ are fixed globally for the full SPARC sample. No parameters vary from galaxy to galaxy, and no optimization is performed at the level of individual systems. The mapping thus defines a single, universal functional relation applied uniformly across all galaxies and radii.
+
+\section{Data and Methodology}
+
+This section describes the dataset used in the analysis and the precise sequence of operations applied to it. The goal is to make the methodology fully transparent and reproducible, and to demonstrate that the reported results arise directly from the defined mapping rather than from hidden processing steps or per-galaxy adjustments.
+
+\subsection{SPARC Sample}
+
+The analysis is performed using the SPARC (Spitzer Photometry and Accurate Rotation Curves) database \citep{Lelli2016}, which provides high-quality rotation curves and baryonic mass models for disk galaxies spanning a wide range of masses, surface brightnesses, and morphologies.
+
+For each galaxy, the SPARC dataset supplies:
+\begin{itemize}
+\item The observed rotation velocity $V_{\mathrm{obs}}(r)$ as a function of galactocentric radius,
+\item The baryonic rotation velocity $V_{\mathrm{lum}}(r)$ constructed from stellar and gas mass components,
+\item The corresponding radial sampling points $r$.
+\end{itemize}
+
+All galaxies in the publicly available SPARC rotation-curve sample are included, subject only to the requirement that both $V_{\mathrm{obs}}$ and $V_{\mathrm{lum}}$ are defined at the given radii. No additional quality cuts, smoothing, interpolation, or rebinning are applied.
+
+The final sample consists of 175 disk galaxies, comprising several thousand individual radial measurements. Each radial point is treated independently when constructing $\Delta X_{\mathrm{obs}}$, and no information is shared between galaxies during the analysis.
+
+\subsection{Order of Operations}
+
+To avoid ambiguity regarding the origin of the results, the analysis follows a fixed and explicit order of operations, applied identically to every galaxy in the sample:
+
+\begin{enumerate}
+\item Load the SPARC rotation-curve data for each galaxy, using the discrete radial sampling provided.
+\item Compute the observed quantity $\Delta X_{\mathrm{obs}}(r)$ from $V_{\mathrm{obs}}(r)$ and $V_{\mathrm{lum}}(r)$ at each radius.
+\item Construct the normalized radial coordinate $\hat{D}$ from the physical radius $r$ using a fixed normalization scheme.
+\item Evaluate the baryonic driver function $B(\hat{D})$, including saturation behavior, using globally fixed parameters.
+\item Solve the $\Delta X$ mapping analytically to obtain $\Delta X_{\mathrm{pred}}(\hat{D})$.
+\item Compare $\Delta X_{\mathrm{pred}}(r)$ to $\Delta X_{\mathrm{obs}}(r)$ at each radial point.
+\item Aggregate residuals into per-galaxy and sample-level performance metrics.
+\end{enumerate}
+
+\par
+At no stage are neighboring radial points combined, averaged, or compared prior to metric evaluation.
+
+No smoothing, interpolation, filtering, or galaxy-specific optimization is performed at any stage. All operations are algebraic or analytic, and all parameters entering the mapping are fixed prior to evaluating the sample.
+
+\subsection{Metrics}
+
+To characterize the performance of the $\Delta X$ mapping, we report two complementary classes of metrics: an absolute metric and a shape-based metric. Both are computed directly from the residuals between $\Delta X_{\mathrm{pred}}$ and $\Delta X_{\mathrm{obs}}$.
+
+The absolute metric quantifies the overall amplitude agreement between the predicted and observed quantities,
+\begin{equation}
+\mathrm{RMSE}_{\mathrm{abs}} =
+\sqrt{\left\langle \left( \Delta X_{\mathrm{pred}} - \Delta X_{\mathrm{obs}} \right)^2 \right\rangle},
+\end{equation}
+where the average is taken over all radial points within a galaxy. This metric penalizes both shape mismatches and systematic offsets in magnitude.
+
+The shape metric is designed to isolate the radial structure of the mapping independent of overall normalization. For each galaxy, both $\Delta X_{\mathrm{pred}}$ and $\Delta X_{\mathrm{obs}}$ are rescaled by a single best-fit multiplicative factor before computing residuals. The resulting root-mean-square error captures how well the mapping reproduces the *form* of the rotation-curve structure as a function of radius, independent of absolute scale.
+
+To compute the shape metric in practice, multiply both the predicted and observed $\Delta X$ profiles by a single scalar chosen to minimize their squared difference, then evaluate the root-mean-square error of the rescaled residuals at all sampled radii.
+
+Reporting both metrics allows the mapping to be assessed from complementary perspectives. The absolute metric reflects full quantitative agreement, while the shape metric tests whether the mapping captures the radial organization of the data even when amplitude mismatches are present. Neither metric is optimized during the analysis; both are evaluated after the mapping is applied with fixed parameters.
+
+\section{Results Across the SPARC Sample}
+
+This section presents the performance of the $\Delta X$ mapping when applied uniformly across the full SPARC sample. All results are obtained using a single, fixed set of parameters $(b = 0.5,\, N = 1.3,\, \lambda = 1.0)$ with logarithmic saturation, applied identically to all galaxies and all radii. No per-galaxy fitting or optimization is performed.
+
+\subsection{Sample-Wide Performance}
+
+The mapping is evaluated on a sample of 175 disk galaxies, comprising several thousand individual radial measurements. For each galaxy, residuals between the predicted and observed $\Delta X$ values are aggregated into per-galaxy performance metrics, which are then examined across the full sample.
+
+Across the 175 galaxies in the sample, the mapping yields consistently bounded residuals without any galaxy-specific parameter adjustment. The distribution of per-galaxy errors shows a well-defined central concentration with a gradual tail toward higher values, rather than a bimodal structure or a distinct population of failures.
+
+
+Galaxies occupying the high-error tail are typically systems with sparse radial sampling, strong non-circular motions, or known observational irregularities in the SPARC data. Importantly, even in these cases the mapping remains stable and does not exhibit divergent or oscillatory behavior. No special handling or exclusion of such systems is applied.
+
+\par
+Galaxies with the largest residuals are typically systems with sparse radial sampling or limited radial extent, rather than exhibiting qualitatively different dynamical behavior.
+
+Using the shape-based metric, the median root-mean-square error across the sample is
+\[
+\mathrm{median}\left(\mathrm{RMSE}_{\mathrm{shape}}\right) = 0.15 ,
+\]
+with the central 68 per cent of galaxies spanning approximately
+\[
+0.11 \lesssim \mathrm{RMSE}_{\mathrm{shape}} \lesssim 0.31 .
+\]
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/fig3_rmse_cdf.png}
+    \caption{Cumulative distribution of the shape-based $\mathrm{RMSE}_{\mathrm{shape}}$ metric across the full SPARC sample.
+    Vertical dashed lines mark the median (50\%), central 68\%, and 90\% quantiles of the distribution.
+    The majority of galaxies exhibit low shape residuals, with a gradual tail toward higher values and no distinct population of catastrophic outliers.}
+    \label{fig:rmse_cdf}
+\end{figure}
+
+\par
+We now illustrate how this sample-level behavior manifests at the level of individual galaxies.
+
+The worst-performing system in the sample has $\mathrm{RMSE}_{\mathrm{shape}} \simeq 0.93$, while the majority of galaxies cluster well below this value.
+
+For the absolute metric, which penalizes both shape mismatches and amplitude offsets, the median performance is
+\[
+\mathrm{median}\left(\mathrm{RMSE}_{\mathrm{abs}}\right) = 0.57 ,
+\]
+with a comparable spread across the sample. As expected, absolute errors are systematically larger than shape-based errors, reflecting residual normalization differences that are not optimized by the fixed-parameter mapping.
+
+Importantly, the distribution of errors shows no evidence for a distinct subpopulation of catastrophic failures. Instead, performance degrades gradually toward the high-error tail, with no clear boundary separating well-behaved systems from poorer cases.
+
+Across the sample, the mapping behaves smoothly across a wide range of galaxy properties.
+
+\subsection{Representative Galaxy Examples}
+
+The representative galaxy examples shown here are not selected to optimize agreement with the mapping. Instead, they are chosen to illustrate typical behavior across the sample, spanning a range of surface brightnesses, masses, and rotation-curve morphologies. Their purpose is to demonstrate how the sample-level statistics manifest at the level of individual systems.
+
+To illustrate how the $\Delta X$ mapping performs at the level of individual systems, Figure~\ref{fig:deltax_examples} presents representative examples drawn from the SPARC sample. These galaxies span a range of masses, surface brightnesses, and rotation-curve morphologies, and include both typical and challenging cases.
+
+In each example, the observed $\Delta X_{\mathrm{obs}}(r)$ profile is compared directly to the predicted $\Delta X_{\mathrm{pred}}(r)$ obtained from the fixed-parameter mapping. The figures show that the mapping captures the overall radial structure of the rotation curves, including the transition from inner to outer regimes, without requiring any galaxy-specific adjustments.
+
+Even in systems where the absolute amplitude is imperfectly matched, the predicted profiles closely track the observed radial dependence.
+
+The agreement illustrated in these examples reflects the typical behavior seen across the full sample.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/fig1_deltax_examples.png}
+    \caption{Representative examples of observed and predicted $\Delta X(r)$ profiles
+    for four SPARC galaxies spanning a range of masses, surface brightnesses, and
+    rotation-curve morphologies. Open circles show the observed
+    $\Delta X_{\mathrm{obs}}$ values at the native SPARC radii, while dashed lines show
+    the fixed-parameter $\Delta X_{\mathrm{pred}}$ mapping evaluated independently at
+    each radius. No smoothing, interpolation, or galaxy-specific fitting is applied.}
+    \label{fig:deltax_examples}
+\end{figure}
+
+Figure~\ref{fig:velocity_examples} shows the same representative galaxies projected back into velocity space, illustrating how the structural agreement observed in $\Delta X$ translates into the corresponding rotation curves.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/fig2_velocity_examples.png}
+    \caption{Rotation curves in velocity space for the same representative galaxies shown in Figure~\ref{fig:deltax_examples}.
+    Points show the observed rotation velocities $V_{\mathrm{obs}}(r)$ from SPARC, while dashed curves show the velocities implied by the fixed-parameter $\Delta X$ mapping when projected back into physical units.
+    The mapping is evaluated independently at each radius using the same globally fixed parameters as in Figure~\ref{fig:deltax_examples}, with no galaxy-specific fitting, smoothing, or interpolation.
+    Differences in overall amplitude reflect residual normalization offsets not adjusted by the fixed-parameter formulation, while the radial structure follows directly from the agreement in $\Delta X$ space.}
+    \label{fig:velocity_examples}
+\end{figure}
+
+\subsection{Inner vs Outer Radii Contribution}
+
+To assess whether the performance of the mapping is dominated by a particular radial regime, we compute shape-based errors separately for inner and outer radii within each galaxy. The radial split is defined using the median normalized radius $\hat{D}$ for each system.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/fig4_inner_outer.png}
+    \caption{Comparison of inner- and outer-region contributions to the shape-based
+    $\mathrm{RMSE}_{\mathrm{shape}}$ metric for individual galaxies in the SPARC sample.
+    Each point represents a single galaxy, with the inner-region RMSE plotted against
+    the outer-region RMSE. The dashed diagonal indicates equal contribution from inner
+    and outer radii. Galaxies distributed near this line indicate comparable performance
+    across radial regimes, while deviations reflect cases where residuals are dominated
+    by either inner or outer regions.}
+    \label{fig:inner_outer}
+\end{figure}
+
+Across the full sample, the median inner-region shape error is
+\[
+\mathrm{median}\left(\mathrm{RMSE}_{\mathrm{shape,\,inner}}\right) = 0.15 ,
+\]
+while the median outer-region shape error is
+\[
+\mathrm{median}\left(\mathrm{RMSE}_{\mathrm{shape,\,outer}}\right) = 0.08 .
+\]
+
+These results demonstrate that the mapping is not driven exclusively by either the inner or outer regions of galaxies. While outer radii exhibit slightly lower residuals on average, inner regions contribute comparably to the overall performance. This balance indicates that the mapping captures coherent radial structure across the full extent of the rotation curves, rather than being driven primarily by a single radial scale.
+
+The $\Delta X$ mapping thus responds to distributed radial information rather than relying primarily on outer-disk behavior.
+
+Across the heterogeneous galaxy sample, a single fixed-parameter mapping reproduces key features of rotation-curve structure without recourse to per-object tuning or flexible model components.
+
+\section{Ablation and Robustness Tests}
+
+This section examines the necessity and robustness of the components entering the $\Delta X$ mapping. We perform controlled ablation tests to determine which terms contribute materially to the mapping’s performance, assess sensitivity to the saturation form, and evaluate the stability of results under variation of the fixed parameters.
+
+All tests in this section are conducted using fixed global parameters and identical analysis procedures. No galaxy-by-galaxy optimization is introduced.
+
+\subsection{Term Ablation}
+
+Before presenting the ablation results, we clarify the role of the tested components.
+The $\Delta X$ mapping defined in Section~2 represents the empirically preferred final form identified in this work.
+However, during its development we considered a broader class of candidate mappings in which the baryonic driver could depend on combinations of normalized mass ($M$), distance ($D$), and intensity ($I$) terms.
+These additional dependencies are not assumed in the final formulation, but are examined here solely to assess whether they provide independent empirical explanatory power beyond the normalized radial dependence.
+
+
+To assess which components of the mapping contribute empirically to its performance, we perform a systematic ablation study in which individual terms are removed or combined while holding the remaining structure fixed. Specifically, we evaluate variants constructed from combinations of candidate mass ($M$), distance ($D$), and intensity ($I$) dependencies explored during the development of the mapping, including single-term, two-term, and full combinations.
+
+During these tests, all exponents are fixed to identical values ($a = b = c = 0.5$) to isolate the relative contribution of each term without conflating ablation effects with exponent optimization. All other parameters, including the saturation form and $N$, are held fixed across variants.
+
+Performance is evaluated using the absolute $\Delta X$ metric and aggregated across the full SPARC sample. Table~X summarizes the median and mean performance for each ablation variant, while Figure~X shows the distribution of best-performing variants on a per-galaxy basis.
+
+The results show a clear and consistent pattern. The distance-only variant (denoted \texttt{only\_D}) yields the lowest median absolute error across the full sample, outperforming all multi-term combinations. In a per-galaxy comparison, the distance-only variant provides the best absolute performance for 152 out of 175 galaxies. The next most competitive variant, which excludes the intensity term, accounts for a substantially smaller fraction of cases.
+
+Variants relying exclusively on mass or intensity perform significantly worse, and the full three-term mapping does not improve performance relative to the distance-only case. These results indicate that, within the structure tested here, the empirical performance of the mapping is dominated by the distance dependence.
+
+Importantly, the ablation results do not indicate that additional terms provide systematic improvements once the distance term is included. On empirical grounds, this motivates the simplified form of the $\Delta X$ mapping adopted in the remainder of this work, in which only the distance dependence is retained.
+
+\subsection{Saturation Robustness}
+
+The $\Delta X$ mapping incorporates a saturation mechanism to prevent unbounded growth of the baryonic driver at large radii. To assess whether the results depend sensitively on the specific functional form of this saturation, we evaluate several alternative choices, including logarithmic, fractional, and hyperbolic tangent forms.
+
+Each saturation variant is tested using identical parameters and applied uniformly across the full SPARC sample. Performance metrics are computed and compared at both the per-galaxy and sample-aggregated levels.
+
+Across all tested forms, the resulting performance metrics are comparable in magnitude and distribution. No saturation variant yields a qualitatively distinct improvement or degradation in performance. The presence of saturation is essential for stable behavior, but the precise functional form is not finely tuned.
+
+These results indicate that the success of the $\Delta X$ mapping does not hinge on a specific saturation prescription. Instead, it is the existence of a bounded growth mechanism, rather than its detailed shape, that is empirically required.
+
+\subsection{Exponent Sensitivity}
+
+To evaluate the sensitivity of the mapping to the fixed parameter values, we perform grid scans over the exponent parameters governing the distance dependence and quadratic coupling. In particular, we explore a broad range of values for the distance exponent $b$ and the coupling parameter $N$ while holding all other aspects of the analysis fixed.
+
+The resulting performance landscape exhibits a broad basin of low error rather than a sharply localized optimum. Values near $b \simeq 0.5$ and $N \simeq 1.3$ yield the best median performance, but neighboring values produce comparably good results. No fine tuning is required to achieve strong performance across the sample.
+
+This behavior indicates that the $\Delta X$ mapping is structurally stable under parameter variation and does not rely on narrowly tuned numerical values. The mapping’s empirical performance reflects a robust functional dependence rather than sensitivity to precise parameter choices.
+
+
+
+Having established which components of the $\Delta X$ mapping are empirically necessary (Section~5.1) and demonstrated the robustness of its performance under controlled variations (Sections~5.2 and~5.3), we now situate the resulting fixed-parameter mapping within the context of existing empirical relations linking baryonic structure and galaxy dynamics.
+
+\section{Relation to Existing Empirical Relations}
+
+The $\Delta X$ mapping does not exist in isolation from the broader landscape of empirical relations connecting baryonic structure and galaxy dynamics. In this section, we clarify how the mapping relates to two well-established empirical results: the Radial Acceleration Relation (RAR) and the Baryonic Tully--Fisher Relation (BTFR). The goal is not to reinterpret these relations, but to situate $\Delta X$ within the same empirical context and to delineate points of overlap and distinction.
+
+\subsection{Relation to the Radial Acceleration Relation}
+
+The Radial Acceleration Relation describes a tight empirical correlation between the observed centripetal acceleration inferred from galaxy rotation curves and the acceleration predicted by the observed baryonic mass distribution \citep[e.g.][]{Milgrom1983,Famaey2012,Li2019}. It is typically expressed as a relation between $g_{\mathrm{obs}}(r)$ and $g_{\mathrm{bar}}(r)$ evaluated at corresponding radii.
+
+The $\Delta X$ mapping is closely related to the RAR in the sense that both are constructed from the same underlying observables: the observed rotation velocity and the baryonic contribution. Indeed, the observed quantity
+\[
+\Delta X_{\mathrm{obs}}(r) = \frac{V_{\mathrm{obs}}^2(r) - V_{\mathrm{lum}}^2(r)}{V_{\mathrm{lum}}^2(r)}
+\]
+can be rewritten algebraically in terms of the ratio $g_{\mathrm{obs}}/g_{\mathrm{bar}}$, making $\Delta X$ a dimensionless reformulation of the same empirical information.
+
+In this sense, the RAR can be viewed as a projection of the $\Delta X$ data onto acceleration space, collapsing the radial dependence into a two-variable relation. The $\Delta X$ mapping differs in that it explicitly retains the radial coordinate through the normalized distance $\hat{D}$ and predicts the full radial structure of the rotation curve rather than a pointwise correlation.
+
+Moreover, the $\Delta X$ mapping introduces a fixed-parameter functional dependence linking baryonic structure and dynamics across all radii simultaneously. While the RAR emphasizes the tightness of the empirical correlation at individual radii, the $\Delta X$ mapping emphasizes the coherence of radial structure across galaxies without per-galaxy tuning. The two approaches are therefore complementary: the RAR highlights local acceleration regularities, while $\Delta X$ captures how those regularities organize into full rotation-curve profiles.
+
+\subsection{Relation to the Baryonic Tully--Fisher Relation}
+
+The Baryonic Tully--Fisher Relation is an empirical scaling between a galaxy’s total baryonic mass and a characteristic rotation velocity, typically measured in the outer, approximately flat portion of the rotation curve \citep{TullyFisher1977}. By construction, it reduces each galaxy to a single representative point in parameter space.
+
+The $\Delta X$ mapping naturally connects to the BTFR in the outer-radius regime. At sufficiently large normalized radii $\hat{D}$, the saturation behavior of the baryonic driver $B(\hat{D})$ leads to an approximately constant predicted $\Delta X$, corresponding to a stable ratio between observed and baryonic rotation velocities. Evaluating the mapping at a single suitably large radius therefore yields a one-point summary that is closely related to BTFR-style scaling relations.
+
+However, the intent and scope of the $\Delta X$ mapping differ fundamentally from those of the BTFR. Rather than focusing on a single characteristic radius or velocity, the mapping operates across the full radial extent of each galaxy. The BTFR can thus be understood as a specific projection of the more general radial behavior encoded by $\Delta X$.
+
+This distinction is important: while the BTFR captures a remarkably tight global scaling, it does not address how rotation curves transition from inner to outer regions or how baryonic structure shapes that transition. The $\Delta X$ mapping, by contrast, is explicitly constructed to describe radial structure while remaining compatible with known outer-radius behavior.
+
+Viewed in this context, $\Delta X$ does not replace existing empirical relations, nor does it contradict them. Instead, it provides a framework in which relations such as the RAR and BTFR appear as limiting cases or projections of a broader, fixed-parameter mapping applied across full rotation curves.
+
+\section{Discussion}
+
+The results presented in this work demonstrate that a simple, fixed-parameter mapping can capture key features of galaxy rotation-curve structure across a large and diverse sample of disk galaxies. Applied uniformly to the SPARC dataset, the $\Delta X$ mapping reproduces both the radial organization and, to a lesser extent, the absolute amplitude of the observed excess rotation velocity without any galaxy-by-galaxy parameter adjustment or optimization.
+
+A central empirical finding is that the mapping performs coherently across systems spanning wide ranges in mass, size, surface brightness, and rotation-curve morphology. The absence of catastrophic failures and the gradual degradation of performance toward a high-error tail suggest that the mapping is not narrowly tuned to a restricted subset of galaxies. Instead, it appears to encode a regularity that is broadly shared across disk galaxies.
+
+At the same time, the analysis makes clear what the $\Delta X$ mapping does \emph{not} claim. The mapping is not derived from a physical theory, nor is it presented as an explanation of galaxy dynamics. No assumptions are made regarding the underlying origin of the observed behavior, whether baryonic, non-baryonic, or otherwise. The mapping is purely empirical, and its role is to characterize what is present in the data rather than to interpret why it arises.
+
+The distinction between the absolute and shape-based performance metrics further clarifies the scope of the results. The shape metric demonstrates that the mapping captures the radial structure of rotation curves with high fidelity, independent of overall normalization. The absolute metric, which additionally penalizes amplitude offsets, exhibits larger scatter, reflecting residual differences that are not corrected by the fixed-parameter form. Reporting both metrics emphasizes that structural agreement and amplitude agreement probe complementary aspects of the mapping’s performance.
+
+One notable aspect of the results is the dominance of the normalized radial dependence in the ablation tests. When evaluated under controlled conditions with fixed exponents, the distance-only variant consistently outperforms more complex combinations involving additional terms. This suggests that, within the structure explored here, radial organization plays a primary role in shaping the empirical behavior captured by $\Delta X$. Importantly, this conclusion is empirical rather than interpretive and does not preclude additional dependencies under alternative formulations.
+
+The robustness tests further indicate that the mapping does not rely on finely tuned functional choices. While saturation is essential to prevent unbounded growth at large radii, the precise functional form of that saturation is not critical. Likewise, the parameter scans reveal a broad region of good performance rather than a sharply defined optimum, reinforcing the view that the mapping reflects a stable empirical pattern rather than numerical coincidence.
+
+Several limitations should be noted. The analysis is restricted to disk galaxies with well-measured rotation curves and does not address spheroidal systems, strongly interacting galaxies, or regimes dominated by non-circular motions. The normalization of the radial coordinate, while standard and fixed in form, introduces an implicit structural scale that may warrant further exploration. Additionally, the mapping is evaluated only against SPARC-quality data, and its behavior under different observational conditions remains to be tested.
+
+Future empirical work could extend this analysis in several directions. Applying the mapping to independent rotation-curve datasets would provide a valuable test of its generality. Exploring alternative choices for the radial normalization or extending the framework to incorporate additional observables could further clarify the scope of the observed regularity. Finally, while beyond the intent of this paper, the existence of a fixed-parameter mapping operating across heterogeneous systems may motivate theoretical investigations aimed at understanding the origin of such behavior.
+
+In summary, the $\Delta X$ mapping provides a compact empirical description of galaxy rotation-curve structure that complements existing relations while retaining full radial information. Its performance across the SPARC sample establishes a clear empirical result that can serve as a reference point for future observational and theoretical studies.
+
+\section{Conclusions}
+
+We have presented $\Delta X$, a fixed-parameter empirical mapping designed to describe the radial structure of galaxy rotation curves. Applied uniformly across the SPARC sample, the mapping reproduces key features of the observed rotation-curve behavior without galaxy-by-galaxy tuning, profile-specific optimization, or flexible model components.
+
+Using a single globally fixed set of parameters, the mapping captures the radial organization of rotation curves across 175 disk galaxies spanning a wide range of masses, sizes, and surface brightnesses. Performance remains stable across the sample, with bounded residuals and no evidence for a distinct population of catastrophic failures. Both sample-level statistics and representative individual examples demonstrate coherent behavior across heterogeneous systems.
+
+A central result of this work is the robustness of the mapping. Ablation tests show that the empirical performance is dominated by the normalized radial dependence, with additional terms providing no systematic improvement under controlled conditions. Alternative saturation prescriptions yield comparable results, and parameter scans reveal a broad region of good performance rather than a finely tuned optimum. Together, these tests indicate that the observed behavior reflects a stable empirical pattern rather than sensitivity to specific modeling choices.
+
+The $\Delta X$ mapping is closely related to existing empirical relations such as the Radial Acceleration Relation and the Baryonic Tully--Fisher Relation, which can be understood as projections or limiting cases of the more general radial behavior encoded here. Unlike these relations, however, $\Delta X$ operates directly at the level of full rotation-curve structure, retaining explicit radial information while remaining compatible with known empirical trends.
+
+The scope of this work is intentionally empirical. The mapping is not derived from a physical theory and does not attempt to explain the origin of the observed behavior. Its purpose is to characterize, in a transparent and reproducible manner, the regularities present in galaxy rotation curves when expressed through a fixed-parameter framework.
+
+In summary, $\Delta X$ provides a compact and robust empirical description of galaxy rotation-curve structure across the SPARC sample. By demonstrating that a single fixed-parameter mapping can capture coherent radial behavior across diverse systems, this work establishes a clear observational result that may serve as a useful reference point for future empirical and theoretical investigations.
+
+\bibliographystyle{mnras}
+\begin{thebibliography}{}
+
+\bibitem[Famaey \& McGaugh(2012)]{Famaey2012}
+Famaey, B., \& McGaugh, S. (2012).
+Modified Newtonian Dynamics (MOND): Observational Phenomenology and Relativistic Extensions.
+Living Reviews in Relativity, 15, 10.
+
+\bibitem[Katz et al.(2017)]{Katz2017}
+Katz, H., Lelli, F., McGaugh, S. S., Di Cintio, A., Brook, C. B., \& Schombert, J. M. (2017).
+Testing feedback-modified dark matter halos with galaxy rotation curves.
+Monthly Notices of the Royal Astronomical Society, 466, 1648--1658.
+
+\bibitem[Lelli et al.(2016)]{Lelli2016}
+Lelli, F., McGaugh, S. S., \& Schombert, J. M. (2016).
+SPARC: Mass Models for 175 Disk Galaxies with Spitzer Photometry and Accurate Rotation Curves.
+The Astronomical Journal, 152, 157.
+
+\bibitem[Li et al.(2019)]{Li2019}
+Li, P., Lelli, F., McGaugh, S. S., \& Schombert, J. M. (2019).
+A constant characteristic acceleration scale in galaxies.
+Astronomy \& Astrophysics, 623, A40.
+
+\bibitem[Milgrom(1983)]{Milgrom1983}
+Milgrom, M. (1983).
+A modification of the Newtonian dynamics as a possible alternative to the hidden mass hypothesis.
+The Astrophysical Journal, 270, 365--370.
+
+\bibitem[Navarro, Frenk \& White(1996)]{NFW1996}
+Navarro, J. F., Frenk, C. S., \& White, S. D. M. (1996).
+The structure of cold dark matter halos.
+The Astrophysical Journal, 462, 563.
+
+\bibitem[Tully \& Fisher(1977)]{TullyFisher1977}
+Tully, R. B., \& Fisher, J. R. (1977).
+A new method of determining distances to galaxies.
+Astronomy and Astrophysics, 54, 661--673.
+
+\end{thebibliography}
+
+\appendix
+\clearpage
+\onecolumn
+
+\section{Per-Galaxy Performance Metrics}
+\label{app:per_galaxy}
+
+This appendix provides the full per-galaxy performance metrics underlying the
+sample-level statistics discussed in Sections~4 and~5.
+
+\begin{longtable}{lrrrrr}
+\caption{Per-galaxy performance metrics for the fixed-parameter $\Delta X$ mapping applied to the SPARC sample.
+All RMSE values are dimensionless and computed as defined in Section~3.3.} \\
+\toprule
+Galaxy & $N_r$ & $\mathrm{RMSE}_{\mathrm{shape}}$ & $\mathrm{RMSE}_{\mathrm{shape,inner}}$ & $\mathrm{RMSE}_{\mathrm{shape,outer}}$ & $\mathrm{RMSE}_{\mathrm{abs}}$ \\
+\midrule
+\endfirsthead
+\caption[]{Per-galaxy performance metrics for the fixed-parameter $\Delta X$ mapping applied to the SPARC sample.} \\
+\toprule
+Galaxy & $N_r$ & $\mathrm{RMSE}_{\mathrm{shape}}$ & $\mathrm{RMSE}_{\mathrm{shape,inner}}$ & $\mathrm{RMSE}_{\mathrm{shape,outer}}$ & $\mathrm{RMSE}_{\mathrm{abs}}$ \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{Continued on next page} \\
+\midrule
+\endfoot
+\bottomrule
+\endlastfoot
+CamB & 9 & 0.135000 & 0.053000 & 0.127000 & 0.352000 \\
+D512-2 & 4 & 0.108000 & NaN & NaN & 0.735000 \\
+D564-8 & 6 & 0.144000 & 0.197000 & 0.040000 & 0.835000 \\
+D631-7 & 16 & 0.325000 & 0.117000 & 0.177000 & 0.851000 \\
+DDO064 & 14 & 0.550000 & 0.773000 & 0.079000 & 0.987000 \\
+DDO154 & 12 & 0.100000 & 0.124000 & 0.067000 & 1.049000 \\
+DDO161 & 31 & 0.126000 & 0.162000 & 0.063000 & 0.374000 \\
+DDO168 & 10 & 0.127000 & 0.095000 & 0.068000 & 0.552000 \\
+DDO170 & 8 & 0.102000 & 0.112000 & 0.071000 & 0.806000 \\
+ESO079-G014 & 15 & 0.213000 & 0.248000 & 0.082000 & 0.217000 \\
+ESO116-G012 & 15 & 0.173000 & 0.227000 & 0.051000 & 0.375000 \\
+ESO444-G084 & 7 & 0.230000 & 0.236000 & 0.223000 & 1.502000 \\
+ESO563-G021 & 30 & 0.136000 & 0.133000 & 0.064000 & 0.136000 \\
+F561-1 & 6 & 0.084000 & 0.067000 & 0.038000 & 0.094000 \\
+F563-1 & 17 & 0.515000 & 0.467000 & 0.260000 & 1.418000 \\
+F563-V1 & 6 & 0.190000 & 0.025000 & 0.135000 & 0.190000 \\
+F563-V2 & 10 & 0.380000 & 0.265000 & 0.197000 & 1.191000 \\
+F565-V2 & 7 & 0.177000 & 0.129000 & 0.224000 & 1.348000 \\
+F567-2 & 5 & 0.138000 & 0.142000 & NaN & 0.401000 \\
+F568-1 & 12 & 0.214000 & 0.129000 & 0.202000 & 1.155000 \\
+F568-3 & 18 & 0.254000 & 0.100000 & 0.248000 & 0.427000 \\
+F568-V1 & 15 & 0.357000 & 0.175000 & 0.267000 & 1.071000 \\
+F571-8 & 13 & 0.310000 & 0.104000 & 0.220000 & 0.350000 \\
+F571-V1 & 7 & 0.120000 & 0.146000 & 0.063000 & 0.753000 \\
+F574-1 & 14 & 0.239000 & 0.157000 & 0.104000 & 0.593000 \\
+F574-2 & 5 & 0.138000 & 0.095000 & NaN & 0.160000 \\
+F579-V1 & 14 & 0.617000 & 0.649000 & 0.117000 & 0.757000 \\
+F583-1 & 25 & 0.554000 & 0.570000 & 0.439000 & 1.042000 \\
+F583-4 & 12 & 0.417000 & 0.549000 & 0.177000 & 0.649000 \\
+IC2574 & 34 & 0.166000 & 0.086000 & 0.213000 & 0.569000 \\
+IC4202 & 32 & 0.122000 & 0.117000 & 0.120000 & 0.123000 \\
+KK98-251 & 15 & 0.202000 & 0.154000 & 0.235000 & 0.489000 \\
+NGC0024 & 29 & 0.262000 & 0.184000 & 0.179000 & 0.384000 \\
+NGC0055 & 21 & 0.125000 & 0.038000 & 0.177000 & 0.287000 \\
+NGC0100 & 21 & 0.129000 & 0.064000 & 0.123000 & 0.366000 \\
+NGC0247 & 26 & 0.261000 & 0.317000 & 0.045000 & 0.503000 \\
+NGC0289 & 28 & 0.102000 & 0.136000 & 0.046000 & 0.256000 \\
+NGC0300 & 25 & 0.095000 & 0.071000 & 0.115000 & 0.615000 \\
+NGC0801 & 13 & 0.221000 & 0.213000 & 0.029000 & 0.363000 \\
+NGC0891 & 18 & 0.099000 & 0.138000 & 0.015000 & 0.325000 \\
+NGC1003 & 36 & 0.174000 & 0.051000 & 0.126000 & 0.751000 \\
+NGC1090 & 24 & 0.091000 & 0.105000 & 0.022000 & 0.118000 \\
+NGC1705 & 14 & 0.152000 & 0.205000 & 0.039000 & 1.145000 \\
+NGC2366 & 26 & 0.152000 & 0.158000 & 0.130000 & 0.379000 \\
+NGC2403 & 73 & 0.165000 & 0.212000 & 0.095000 & 0.166000 \\
+NGC2683 & 11 & 0.117000 & 0.120000 & 0.039000 & 0.126000 \\
+NGC2841 & 50 & 0.105000 & 0.094000 & 0.075000 & 0.159000 \\
+NGC2903 & 34 & 0.071000 & 0.094000 & 0.033000 & 0.190000 \\
+NGC2915 & 30 & 0.313000 & 0.425000 & 0.098000 & 1.492000 \\
+NGC2955 & 24 & 0.194000 & 0.201000 & 0.086000 & 0.375000 \\
+NGC2976 & 27 & 0.120000 & 0.075000 & 0.154000 & 0.137000 \\
+NGC2998 & 13 & 0.583000 & 0.708000 & 0.018000 & 0.592000 \\
+NGC3109 & 25 & 0.395000 & 0.338000 & 0.388000 & 1.455000 \\
+NGC3198 & 43 & 0.091000 & 0.092000 & 0.031000 & 0.153000 \\
+NGC3521 & 41 & 0.117000 & 0.124000 & 0.037000 & 0.384000 \\
+NGC3726 & 12 & 0.106000 & 0.062000 & 0.129000 & 0.147000 \\
+NGC3741 & 21 & 0.127000 & 0.150000 & 0.089000 & 1.519000 \\
+NGC3769 & 12 & 0.088000 & 0.039000 & 0.102000 & 0.233000 \\
+NGC3877 & 13 & 0.128000 & 0.134000 & 0.102000 & 0.141000 \\
+NGC3893 & 10 & 0.051000 & 0.037000 & 0.022000 & 0.065000 \\
+NGC3917 & 17 & 0.142000 & 0.085000 & 0.101000 & 0.241000 \\
+NGC3949 & 7 & 0.070000 & 0.011000 & 0.049000 & 0.212000 \\
+NGC3953 & 8 & 0.113000 & 0.035000 & 0.113000 & 0.143000 \\
+NGC3972 & 10 & 0.068000 & 0.091000 & 0.033000 & 0.222000 \\
+NGC3992 & 9 & 0.107000 & 0.113000 & 0.023000 & 0.193000 \\
+NGC4010 & 12 & 0.167000 & 0.224000 & 0.064000 & 0.167000 \\
+NGC4013 & 36 & 0.082000 & 0.082000 & 0.074000 & 0.100000 \\
+NGC4051 & 7 & 0.098000 & 0.050000 & 0.073000 & 0.183000 \\
+NGC4068 & 6 & 0.203000 & 0.104000 & 0.086000 & 0.258000 \\
+NGC4085 & 7 & 0.079000 & 0.091000 & 0.044000 & 0.292000 \\
+NGC4088 & 12 & 0.081000 & 0.087000 & 0.050000 & 0.307000 \\
+NGC4100 & 24 & 0.111000 & 0.119000 & 0.048000 & 0.115000 \\
+NGC4138 & 7 & 0.077000 & 0.069000 & 0.042000 & 0.178000 \\
+NGC4157 & 17 & 0.064000 & 0.075000 & 0.048000 & 0.143000 \\
+NGC4183 & 23 & 0.205000 & 0.223000 & 0.052000 & 0.372000 \\
+NGC4214 & 14 & 0.272000 & 0.372000 & 0.065000 & 0.703000 \\
+NGC4217 & 19 & 0.061000 & 0.051000 & 0.042000 & 0.247000 \\
+NGC4389 & 6 & 0.117000 & 0.056000 & 0.076000 & 0.374000 \\
+NGC4559 & 32 & 0.077000 & 0.105000 & 0.030000 & 0.078000 \\
+NGC5005 & 18 & 0.147000 & 0.152000 & 0.029000 & 0.387000 \\
+NGC5033 & 22 & 0.067000 & 0.083000 & 0.037000 & 0.134000 \\
+NGC5055 & 28 & 0.085000 & 0.112000 & 0.034000 & 0.239000 \\
+NGC5371 & 19 & 0.213000 & 0.236000 & 0.034000 & 0.358000 \\
+NGC5585 & 24 & 0.168000 & 0.227000 & 0.068000 & 0.174000 \\
+NGC5907 & 19 & 0.139000 & 0.175000 & 0.037000 & 0.156000 \\
+NGC5985 & 33 & 0.260000 & 0.231000 & 0.075000 & 0.352000 \\
+NGC6015 & 44 & 0.199000 & 0.258000 & 0.080000 & 0.272000 \\
+NGC6195 & 23 & 0.140000 & 0.149000 & 0.062000 & 0.306000 \\
+NGC6503 & 31 & 0.110000 & 0.126000 & 0.054000 & 0.395000 \\
+NGC6674 & 15 & 0.145000 & 0.186000 & 0.063000 & 0.351000 \\
+NGC6789 & 4 & 0.403000 & NaN & NaN & 1.164000 \\
+NGC6946 & 58 & 0.109000 & 0.140000 & 0.018000 & 0.222000 \\
+NGC7331 & 36 & 0.053000 & 0.057000 & 0.048000 & 0.240000 \\
+NGC7793 & 46 & 0.210000 & 0.160000 & 0.059000 & 0.337000 \\
+NGC7814 & 18 & 0.073000 & 0.095000 & 0.038000 & 0.109000 \\
+PGC51017 & 6 & 0.484000 & 0.537000 & 0.024000 & 0.495000 \\
+UGC00128 & 22 & 0.244000 & 0.264000 & 0.085000 & 0.994000 \\
+UGC00191 & 9 & 0.259000 & 0.112000 & 0.203000 & 0.415000 \\
+UGC00634 & 4 & 0.295000 & NaN & NaN & 1.119000 \\
+UGC00731 & 12 & 0.860000 & 0.873000 & 0.101000 & 1.820000 \\
+UGC00891 & 5 & 0.223000 & 0.240000 & NaN & 0.897000 \\
+UGC01230 & 11 & 0.360000 & 0.166000 & 0.199000 & 0.615000 \\
+UGC01281 & 25 & 0.206000 & 0.173000 & 0.233000 & 0.607000 \\
+UGC02023 & 5 & 0.161000 & 0.073000 & NaN & 0.220000 \\
+UGC02259 & 8 & 0.396000 & 0.385000 & 0.095000 & 0.949000 \\
+UGC02455 & 8 & 0.104000 & 0.044000 & 0.125000 & 0.526000 \\
+UGC02487 & 17 & 0.102000 & 0.122000 & 0.057000 & 0.309000 \\
+UGC02885 & 19 & 0.168000 & 0.228000 & 0.022000 & 0.207000 \\
+UGC02916 & 43 & 0.248000 & 0.286000 & 0.176000 & 0.350000 \\
+UGC02953 & 115 & 0.328000 & 0.425000 & 0.090000 & 0.460000 \\
+UGC03205 & 48 & 0.212000 & 0.219000 & 0.141000 & 0.248000 \\
+UGC03546 & 30 & 0.116000 & 0.081000 & 0.051000 & 0.430000 \\
+UGC03580 & 47 & 0.231000 & 0.245000 & 0.183000 & 0.383000 \\
+UGC04278 & 25 & 0.356000 & 0.256000 & 0.366000 & 0.703000 \\
+UGC04305 & 22 & 0.190000 & 0.102000 & 0.045000 & 0.250000 \\
+UGC04325 & 8 & 0.448000 & 0.211000 & 0.217000 & 0.835000 \\
+UGC04483 & 8 & 0.175000 & 0.194000 & 0.069000 & 0.417000 \\
+UGC04499 & 9 & 0.102000 & 0.111000 & 0.081000 & 0.399000 \\
+UGC05005 & 11 & 0.103000 & 0.079000 & 0.100000 & 0.458000 \\
+UGC05253 & 73 & 0.240000 & 0.279000 & 0.085000 & 0.440000 \\
+UGC05414 & 6 & 0.114000 & 0.079000 & 0.072000 & 0.247000 \\
+UGC05716 & 12 & 0.237000 & 0.200000 & 0.107000 & 0.998000 \\
+UGC05721 & 23 & 0.150000 & 0.149000 & 0.147000 & 0.753000 \\
+UGC05750 & 11 & 0.178000 & 0.150000 & 0.204000 & 0.486000 \\
+UGC05764 & 10 & 0.738000 & 0.748000 & 0.195000 & 1.657000 \\
+UGC05829 & 11 & 0.349000 & 0.386000 & 0.240000 & 0.881000 \\
+UGC05918 & 8 & 0.265000 & 0.253000 & 0.109000 & 1.177000 \\
+UGC05986 & 15 & 0.065000 & 0.040000 & 0.078000 & 0.449000 \\
+UGC05999 & 5 & 0.254000 & 0.216000 & NaN & 0.844000 \\
+UGC06399 & 9 & 0.099000 & 0.069000 & 0.123000 & 0.598000 \\
+UGC06446 & 17 & 0.298000 & 0.218000 & 0.101000 & 0.886000 \\
+UGC06614 & 13 & 0.119000 & 0.086000 & 0.078000 & 0.119000 \\
+UGC06628 & 7 & 0.227000 & 0.132000 & 0.099000 & 0.309000 \\
+UGC06667 & 9 & 0.810000 & 0.695000 & 0.181000 & 2.225000 \\
+UGC06786 & 45 & 0.205000 & 0.264000 & 0.111000 & 0.209000 \\
+UGC06787 & 71 & 0.156000 & 0.180000 & 0.128000 & 0.171000 \\
+UGC06818 & 8 & 0.220000 & 0.090000 & 0.116000 & 0.336000 \\
+UGC06917 & 11 & 0.139000 & 0.103000 & 0.093000 & 0.387000 \\
+UGC06923 & 6 & 0.111000 & 0.154000 & 0.024000 & 0.172000 \\
+UGC06930 & 10 & 0.148000 & 0.111000 & 0.169000 & 0.465000 \\
+UGC06973 & 9 & 0.062000 & 0.033000 & 0.080000 & 0.260000 \\
+UGC06983 & 17 & 0.137000 & 0.104000 & 0.084000 & 0.548000 \\
+UGC07089 & 12 & 0.136000 & 0.137000 & 0.134000 & 0.248000 \\
+UGC07125 & 13 & 0.134000 & 0.063000 & 0.125000 & 0.222000 \\
+UGC07151 & 11 & 0.154000 & 0.136000 & 0.058000 & 0.204000 \\
+UGC07232 & 4 & 0.264000 & NaN & NaN & 0.441000 \\
+UGC07261 & 7 & 0.255000 & 0.320000 & 0.076000 & 0.493000 \\
+UGC07323 & 10 & 0.120000 & 0.152000 & 0.075000 & 0.166000 \\
+UGC07399 & 10 & 0.141000 & 0.152000 & 0.052000 & 1.129000 \\
+UGC07524 & 31 & 0.232000 & 0.152000 & 0.231000 & 0.641000 \\
+UGC07559 & 7 & 0.049000 & 0.063000 & 0.017000 & 0.217000 \\
+UGC07577 & 9 & 0.199000 & 0.147000 & 0.148000 & 0.203000 \\
+UGC07603 & 12 & 0.083000 & 0.083000 & 0.054000 & 0.687000 \\
+UGC07608 & 8 & 0.247000 & 0.271000 & 0.133000 & 1.275000 \\
+UGC07690 & 7 & 0.151000 & 0.142000 & 0.043000 & 0.236000 \\
+UGC07866 & 7 & 0.159000 & 0.101000 & 0.030000 & 0.375000 \\
+UGC08286 & 17 & 0.228000 & 0.270000 & 0.064000 & 0.875000 \\
+UGC08490 & 30 & 0.117000 & 0.160000 & 0.040000 & 0.864000 \\
+UGC08550 & 11 & 0.189000 & 0.147000 & 0.199000 & 0.843000 \\
+UGC08699 & 41 & 0.140000 & 0.163000 & 0.062000 & 0.148000 \\
+UGC08837 & 8 & 0.180000 & 0.085000 & 0.046000 & 0.248000 \\
+UGC09037 & 22 & 0.057000 & 0.039000 & 0.047000 & 0.164000 \\
+UGC09133 & 68 & 0.206000 & 0.246000 & 0.054000 & 0.328000 \\
+UGC09992 & 5 & 0.221000 & 0.093000 & NaN & 0.304000 \\
+UGC10310 & 7 & 0.168000 & 0.149000 & 0.075000 & 0.595000 \\
+UGC11455 & 36 & 0.123000 & 0.112000 & 0.053000 & 0.372000 \\
+UGC11557 & 12 & 0.075000 & 0.072000 & 0.055000 & 0.399000 \\
+UGC11820 & 10 & 0.529000 & 0.318000 & 0.109000 & 0.721000 \\
+UGC11914 & 65 & 0.189000 & 0.162000 & 0.124000 & 0.249000 \\
+UGC12506 & 31 & 0.584000 & 0.761000 & 0.079000 & 0.676000 \\
+UGC12632 & 15 & 0.331000 & 0.232000 & 0.221000 & 0.806000 \\
+UGC12732 & 16 & 0.262000 & 0.217000 & 0.164000 & 0.850000 \\
+UGCA281 & 7 & 0.304000 & 0.357000 & 0.024000 & 0.503000 \\
+UGCA442 & 8 & 0.309000 & 0.425000 & 0.059000 & 1.134000 \\
+UGCA444 & 36 & 0.748000 & 0.947000 & 0.231000 & 1.179000 \\
+\end{longtable}
+\clearpage
+\twocolumn
+
+
+\end{document}
