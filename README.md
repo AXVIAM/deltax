@@ -12,10 +12,49 @@ The analysis applies a fixed-parameter empirical mapping to galaxy rotation curv
 ## Repository Structure
 
 ```
-scripts/
-  run_sparc_ltg_deltax.py        Main analysis script used in the paper
-  figures/                      Scripts used to generate paper figures
+.
+├── run_sparc_ltg_deltax.py        Main analysis script used in the paper
+├── scan_onlyD_bn.py               Distance-only parameter scan (Section 5.3)
+├── btfr_outer_radius_test.py      BTFR outer-radius diagnostic (Section 6.2)
+│
+├── scripts/
+│   └── figures/                  Scripts used to generate paper figures
+│       ├── __init__.py
+│       ├── fig1_deltax_examples.py
+│       ├── fig2_velocity_examples.py
+│       ├── fig3_rmse_distribution.py
+│       ├── fig4_inner_outer.py
+│       ├── fig5_worst_cases_table.py
+│       └── fig_structural_field_single_galaxy.py
+│
+├── Rotmod_LTG/                    SPARC late-type galaxy rotation-curve files
+│   └── *.dat                     One file per galaxy (~175 galaxies)
+│
+├── Rotmod_ETG/                    SPARC early-type galaxy files
+│   └── *.dat                     Included for completeness; not used here
+│
+├── outputs/                       Derived analysis products (generated)
+│   ├── ltg_onlyD_log1p/           Primary outputs used in the paper
+│   │   ├── summary_per_galaxy_*.csv
+│   │   ├── summary_sorted_*.csv
+│   │   └── radial/               Per-galaxy radial profiles
+│   │       └── <GALAXY>__full.csv
+│   └── ablation_fixed_exponents/ Ablation test outputs
+│
+├── figures/                       Final figure images used in the manuscript
+│   └── *.png
+│
+├── DeltaX_A_Fixed_Parameter_Mapping_for_Galaxy_Rotation_Curves.tex
+├── per_galaxy_metrics_table.tex
+├── deltax_mnras_cover_letter.tex
+├── README.md
+├── requirements.txt
+└── LICENSE
+```
 
+<<<<<<< HEAD
+**Note:** Directories such as `Rotmod_LTG/` and `outputs/*/radial/` intentionally contain many files (one per galaxy). These files follow consistent naming conventions and formats and are not enumerated individually here.
+=======
 outputs/
   ltg_onlyD_log1p/              Primary analysis outputs
     summary_per_galaxy_*.csv    Per-galaxy performance metrics
@@ -30,6 +69,7 @@ figures/
 
 Rotmod_LTG/                     SPARC rotation-curve .dat files used in the paper
 Rotmod_ETG/                     SPARC rotation-curve .dat files (ETGs, not used here)
+>>>>>>> f3f3b03048e44beee4569485b0061e0a85f81f95
 ```
 
 ---
