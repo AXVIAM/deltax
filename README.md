@@ -28,8 +28,8 @@ figures/
   fig3_rmse_cdf.png
   fig4_inner_outer.png
 
-data/
-  sparc/                        Input SPARC rotation-curve files (not included)
+Rotmod_LTG/                     SPARC rotation-curve .dat files used in the paper
+Rotmod_ETG/                     SPARC rotation-curve .dat files (ETGs, not used here)
 ```
 
 ---
@@ -54,11 +54,7 @@ This work uses publicly available rotation-curve and baryonic mass model data fr
 
 Lelli, F., McGaugh, S. S., Schombert, J. M. (2016), *AJ*, 152, 157
 
-SPARC data are **not redistributed** in this repository. Users should obtain the data directly from the SPARC website and place the rotation-curve files in the expected directory structure under:
-
-```
-data/sparc/
-```
+Rotation-curve data from the SPARC database are included in this repository in their original `.dat` file form for reproducibility. These files correspond to the publicly released SPARC dataset described in Lelli et al. (2016). Users are encouraged to consult the SPARC project page for full documentation and updates to the dataset.
 
 ---
 
@@ -68,7 +64,7 @@ The primary analysis presented in the paper can be reproduced by running the fol
 
 ```
 python scripts/run_sparc_ltg_deltax.py \
-  --in-dir data/sparc \
+  --in-dir Rotmod_LTG \
   --out-dir outputs/ltg_onlyD_log1p \
   --a 0.0 \
   --b 0.5 \
@@ -76,7 +72,7 @@ python scripts/run_sparc_ltg_deltax.py \
   --N 1.3
 ```
 
-This command applies the fixed-parameter $\Delta X$ mapping used in the paper (distance-only variant with logarithmic saturation) to all SPARC rotation-curve files found in `data/sparc/`.
+This command applies the fixed-parameter $\Delta X$ mapping used in the paper (distance-only variant with logarithmic saturation) to all SPARC rotation-curve files found in `Rotmod_LTG/`.
 
 The script produces the following outputs:
 
@@ -129,7 +125,7 @@ Example command:
 
 ```bash
 python scripts/run_sparc_ltg_deltax.py \
-  --in-dir data/sparc \
+  --in-dir Rotmod_LTG \
   --out-dir outputs/ablation_fixed_exponents \
   --a 0.5 \
   --b 0.5 \
@@ -165,7 +161,7 @@ Example command (used for main paper results):
 
 ```bash
 python scripts/run_sparc_ltg_deltax.py \
-  --in-dir data/sparc \
+  --in-dir Rotmod_LTG \
   --out-dir outputs/ltg_onlyD_log1p \
   --a 0.0 \
   --b 0.5 \
@@ -361,7 +357,7 @@ The script does not require command-line arguments. Parameter ranges are defined
 
 - SPARC rotation-curve data placed under:
   ```
-  data/sparc/
+  Rotmod_LTG/
   ```
 - Uses the same data-loading and $\Delta X$ construction logic as the main analysis script.
 
