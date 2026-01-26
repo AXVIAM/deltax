@@ -52,9 +52,7 @@ The analysis applies a fixed-parameter empirical mapping to galaxy rotation curv
 └── LICENSE
 ```
 
-<<<<<<< HEAD
 **Note:** Directories such as `Rotmod_LTG/` and `outputs/*/radial/` intentionally contain many files (one per galaxy). These files follow consistent naming conventions and formats and are not enumerated individually here.
-=======
 outputs/
   ltg_onlyD_log1p/              Primary analysis outputs
     summary_per_galaxy_*.csv    Per-galaxy performance metrics
@@ -69,7 +67,6 @@ figures/
 
 Rotmod_LTG/                     SPARC rotation-curve .dat files used in the paper
 Rotmod_ETG/                     SPARC rotation-curve .dat files (ETGs, not used here)
->>>>>>> f3f3b03048e44beee4569485b0061e0a85f81f95
 ```
 
 ---
