@@ -1,11 +1,11 @@
-# DeltaX: A Fixed-Parameter Mapping for Galaxy Rotation Curves
+# DeltaX: A Fixed-Parameter Mapping of Rotation-Curve Structure
 
 This repository contains the analysis code and derived data products used in the paper:
 
-**Smolen, C. P. B.**, *DeltaX: A Fixed-Parameter Mapping for Galaxy Rotation Curves*  
+**Smolen, C. P. B.**, *DeltaX: A Fixed-Parameter Mapping of Rotation-Curve Structure*  
 (MNRAS, submitted)
 
-The analysis applies a fixed-parameter empirical mapping to galaxy rotation curves from the SPARC database and evaluates its performance across the full sample. All parameters are fixed globally; no galaxy-by-galaxy fitting, smoothing, interpolation, or optimization is performed.
+The analysis applies a fixed-parameter empirical mapping to the radial structure of galaxy rotation curves from the SPARC database and evaluates its performance across the full sample. All parameters are fixed globally; no galaxy-by-galaxy fitting, smoothing, interpolation, or optimization is performed.
 
 ---
 
@@ -21,7 +21,6 @@ The analysis applies a fixed-parameter empirical mapping to galaxy rotation curv
 │   └── figures/                  Scripts used to generate paper figures
 │       ├── __init__.py
 │       ├── fig1_deltax_examples.py
-│       ├── fig2_velocity_examples.py
 │       ├── fig3_rmse_distribution.py
 │       ├── fig4_inner_outer.py
 │       ├── fig5_worst_cases_table.py
@@ -61,7 +60,6 @@ outputs/
 
 figures/
   fig1_deltax_examples.png
-  fig2_velocity_examples.png
   fig3_rmse_cdf.png
   fig4_inner_outer.png
 
@@ -100,7 +98,7 @@ Rotation-curve data from the SPARC database are included in this repository in t
 The primary analysis presented in the paper can be reproduced by running the following command from the repository root:
 
 ```
-python scripts/run_sparc_ltg_deltax.py \
+python run_sparc_ltg_deltax.py \
   --in-dir Rotmod_LTG \
   --out-dir outputs/ltg_onlyD_log1p \
   --a 0.0 \
@@ -161,7 +159,7 @@ To reproduce the ablation tests discussed in Section~5.1 of the paper, run the s
 Example command:
 
 ```bash
-python scripts/run_sparc_ltg_deltax.py \
+python run_sparc_ltg_deltax.py \
   --in-dir Rotmod_LTG \
   --out-dir outputs/ablation_fixed_exponents \
   --a 0.5 \
@@ -197,7 +195,7 @@ The primary results presented in the paper use the distance-only form of the map
 Example command (used for main paper results):
 
 ```bash
-python scripts/run_sparc_ltg_deltax.py \
+python run_sparc_ltg_deltax.py \
   --in-dir Rotmod_LTG \
   --out-dir outputs/ltg_onlyD_log1p \
   --a 0.0 \
@@ -266,30 +264,6 @@ python scripts/figures/fig1_deltax_examples.py \
 
 ---
 
-### Figure 2: Velocity-space rotation curve examples
-
-This figure shows observed and predicted rotation curves in velocity space, corresponding to the same representative galaxies shown in Figure~1. While Figure~1 compares the mapping directly in $\Delta X$ space, this figure illustrates how the fixed-parameter mapping translates back into physical rotation velocities.
-
-Run from the repository root:
-
-```bash
-python scripts/figures/fig2_velocity_examples.py \
-  --radial-dir outputs/ltg_onlyD_log1p/radial \
-  --galaxies CamB DDO154 NGC2403 NGC3198 \
-  --out figures/fig2_velocity_examples.png
-```
-
-**Inputs:**
-- Requires the same per-galaxy radial CSV files produced by the main analysis:
-  `outputs/ltg_onlyD_log1p/radial/<GALAXY>__full.csv`
-
-**Output:**
-- Writes the PNG figure:
-  `figures/fig2_velocity_examples.png`
-
-This figure provides an intuitive velocity-space complement to the $\Delta X$ profiles, demonstrating how agreement in $\Delta X(r)$ corresponds to agreement in the observed rotation curves.
-
----
 
 ### Figure 3: Distribution of shape-based RMSE across the SPARC sample
 
